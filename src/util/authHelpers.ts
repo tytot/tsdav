@@ -1,5 +1,3 @@
-import { encode } from 'base-64';
-import { fetch } from 'cross-fetch';
 import getLogger from 'debug';
 
 import { DAVTokens } from '../types/DAVTypes';
@@ -21,9 +19,9 @@ export const defaultParam =
   };
 
 export const getBasicAuthHeaders = (credentials: DAVCredentials): { authorization?: string } => {
-  debug(`Basic auth token generated: ${encode(`${credentials.username}:${credentials.password}`)}`);
+  debug(`Basic auth token generated: ${btoa(`${credentials.username}:${credentials.password}`)}`);
   return {
-    authorization: `Basic ${encode(`${credentials.username}:${credentials.password}`)}`,
+    authorization: `Basic ${btoa(`${credentials.username}:${credentials.password}`)}`,
   };
 };
 
