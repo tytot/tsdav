@@ -8666,28 +8666,46 @@ const propfind = async (params) => {
 };
 const createObject = async (params) => {
     const { url, data, headers, headersToExclude, fetchOptions = {} } = params;
+    const fetchOptionsWithoutHeaders = {
+        ...fetchOptions,
+    };
+    delete fetchOptionsWithoutHeaders.headers;
     return fetch(url, {
         method: 'PUT',
         body: data,
-        headers: excludeHeaders(headers, headersToExclude),
-        ...fetchOptions,
+        headers: { ...excludeHeaders(headers, headersToExclude), ...fetchOptions.headers },
+        ...fetchOptionsWithoutHeaders,
     });
 };
 const updateObject = async (params) => {
     const { url, data, etag, headers, headersToExclude, fetchOptions = {} } = params;
+    const fetchOptionsWithoutHeaders = {
+        ...fetchOptions,
+    };
+    delete fetchOptionsWithoutHeaders.headers;
     return fetch(url, {
         method: 'PUT',
         body: data,
-        headers: excludeHeaders(cleanupFalsy({ 'If-Match': etag, ...headers }), headersToExclude),
-        ...fetchOptions,
+        headers: {
+            ...excludeHeaders(cleanupFalsy({ 'If-Match': etag, ...headers }), headersToExclude),
+            ...fetchOptions.headers,
+        },
+        ...fetchOptionsWithoutHeaders,
     });
 };
 const deleteObject = async (params) => {
     const { url, headers, etag, headersToExclude, fetchOptions = {} } = params;
+    const fetchOptionsWithoutHeaders = {
+        ...fetchOptions,
+    };
+    delete fetchOptionsWithoutHeaders.headers;
     return fetch(url, {
         method: 'DELETE',
-        headers: excludeHeaders(cleanupFalsy({ 'If-Match': etag, ...headers }), headersToExclude),
-        ...fetchOptions,
+        headers: {
+            ...excludeHeaders(cleanupFalsy({ 'If-Match': etag, ...headers }), headersToExclude),
+            ...fetchOptions.headers,
+        },
+        ...fetchOptionsWithoutHeaders,
     });
 };
 
